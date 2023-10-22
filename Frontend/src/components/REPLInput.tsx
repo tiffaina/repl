@@ -5,6 +5,7 @@ import { load } from "../functions/Load";
 import { Command } from "../functions/Command";
 import { view } from "../functions/View";
 import { search } from "../functions/Search";
+import { REPLFunction } from "../functions/REPLFunction";
 
 /**
  * These are the props for the REPLInput component.
@@ -34,7 +35,12 @@ export function REPLInput(props: REPLInputProps) {
   const [commandString, setCommandString] = useState<string>("");
   const [count, setCount] = useState<number>(0);
   const [filepath, setFilepath] = useState<string>("");
-  const [hasHeader, setHeader] = useState<boolean>(false);
+  const [hasHeader, setHasHeader] = useState<boolean>(false);
+  const [csvLoaded, setCsvLoaded] = useState<boolean>(false);
+  const [csvdata, setCsvData] = useState<string[][]>([[]]);
+  const [header, setHeader] = useState<string[]>([]);
+  const [filePathSearch, setFilePath] = useState<string>("");
+  
 
   // This function enables the command to be sent when the return key is pressed.
   const handleKey = (e: any) => {
@@ -52,6 +58,33 @@ export function REPLInput(props: REPLInputProps) {
     let commandArr: Array<string> = commandString.split(" ");
     let command: String = commandArr[0];
     let newCommand: Command;
+
+    let commandHashMap = new Map<String, REPLFunction>();
+    // populate the commandHashMap with the commands as keys mapped to their 
+    // corresponding REPLFunction as values
+
+    // commandHashMap.set("mode", );
+    commandHashMap.set("load_file", load);
+    commandHashMap.set("view", view);
+    commandHashMap.set("search", search);
+
+
+    // get the corresponding REPLFunction for a certain command
+    let commandFunction = commandHashMap.get(command);
+    // function will return a promise<string> which we can display to REPlHistory
+    if (commandFunction) {
+      let args = commandArr.slice(1)
+      commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData).then((result) => {newCommand = new Command(commandString, [], result)});
+    } else {
+      // unrecognized command
+      newCommand = new Command(
+        commandString,
+        [],
+        "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
+      );
+    }
+    
+
     if (command === "mode") {
       // mode
       props.setMode(!props.mode);

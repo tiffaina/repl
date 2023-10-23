@@ -2,6 +2,7 @@ import "../styles/main.css";
 import CsvTable from "./CsvTable";
 import { Command } from "../functions/Command";
 import { useRef, useEffect } from "react";
+import React from "react";
 
 /**
  * These are the props for the REPLHistory component.

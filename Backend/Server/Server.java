@@ -63,6 +63,17 @@ public class Server {
     Server server = new Server(new ACSAPIDataSource());
     System.out.println("Server started; exiting main...");
 
+    const server = http.createServer(handle);
+    const hostname = 'localhost'
+    const port = 3232
+    server.listen(port, hostname, () => {
+        console.log(`Server is running on http://${hostname}:${port}`);
+    });
+
+    server.on('connection', info => {
+        console.log(`Connection made`);
+    })
+
   }
 
   /**

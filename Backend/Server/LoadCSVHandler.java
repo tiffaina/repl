@@ -79,6 +79,7 @@ public class LoadCSVHandler<T> implements Route {
       HashMap<String, Object> responseMap = new HashMap<>();
       responseMap.put("result", "error_bad_request");
       responseMap.put("filepath", this.filepath);
+      responseMap.put("err_msg", "containsHeader must be true or false")
       return new LoadFailureResponse(responseMap).serialize();
     }
 
@@ -125,6 +126,7 @@ public class LoadCSVHandler<T> implements Route {
       Map<String, Object> responseMap = new HashMap<>();
       responseMap.put("result", "error_datasource");
       responseMap.put("filepath", this.filepath);
+      responseMap.put("err_msg", "some kind of error occured while attempting to load")
       return new LoadFailureResponse(responseMap).serialize();
     }
 

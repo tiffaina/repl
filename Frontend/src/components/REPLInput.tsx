@@ -6,6 +6,7 @@ import { Command } from "../functions/Command";
 import { view } from "../functions/View";
 import { search } from "../functions/Search";
 import { REPLFunction } from "../functions/REPLFunction";
+import React from "react";
 
 /**
  * These are the props for the REPLInput component.
@@ -14,7 +15,7 @@ import { REPLFunction } from "../functions/REPLFunction";
  * - setHistory is a function that allows the caller to set the value of the history array
  * - setMode is a function that allows the caller to set the value of mode
  */
-interface REPLInputProps {
+export interface REPLInputProps {
   history: Command[];
   mode: boolean;
   setHistory: Dispatch<SetStateAction<Command[]>>;
@@ -65,62 +66,69 @@ export function REPLInput(props: REPLInputProps) {
 
     // commandHashMap.set("mode", );
     commandHashMap.set("load_file", load);
-    commandHashMap.set("view", view);
-    commandHashMap.set("search", search);
+    // commandHashMap.set("view", view);
+    // commandHashMap.set("search", search);
 
 
-    // get the corresponding REPLFunction for a certain command
-    let commandFunction = commandHashMap.get(command);
-    // function will return a promise<string> which we can display to REPlHistory
-    if (commandFunction) {
-      let args = commandArr.slice(1)
-      commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData).then((result) => {newCommand = new Command(commandString, [], result)});
-    } else {
-      // unrecognized command
-      newCommand = new Command(
-        commandString,
-        [],
-        "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
-      );
-    }
-    
-
-    if (command === "mode") {
-      // mode
-      props.setMode(!props.mode);
-      newCommand = new Command(commandString, [], "Mode success!");
-    } else if (command === "load_file") {
-      //load
-      if (commandArr.length >= 4 || commandArr.length <= 1) {
+    async function getNewCommand(commandHashMap: Map<String, REPLFunction>) {
+      // get the corresponding REPLFunction for a certain command
+      let commandFunction = commandHashMap.get(command);
+      // function will return a promise<string> which we can display to REPlHistory
+      if (commandFunction) {
+        let args = commandArr.slice(1)
+        const result = await commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData)
+        newCommand = new Command(commandString, [], result)
+        return newCommand
+      
+      } else {
+        // unrecognized command
         newCommand = new Command(
           commandString,
           [],
-          "Error: incorrect number of arguments given to load_file command"
+          "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
         );
-      } else {
-        let loadMessage: string = load(commandArr, setHeader);
-        newCommand = new Command(commandString, [], loadMessage);
-        setFilepath(commandArr[1]);
-      }
-    } else if (command === "view") {
-      // view
-      newCommand = view(filepath, commandString);
-    } else if (command === "search") {
-      // search
-      newCommand = search(filepath, hasHeader, commandString);
-    } else {
-      // unrecognized command
-      newCommand = new Command(
-        commandString,
-        [],
-        "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
-      );
+        return newCommand
+    }
     }
 
     // Update state
     setCount(count + 1);
-    props.setHistory([...props.history, newCommand]);
+    props.setHistory([...props.history, getNewCommand(commandHashMap)]);
     setCommandString("");
+        
+
+    // if (command === "mode") {
+    //   // mode
+    //   props.setMode(!props.mode);
+    //   newCommand = new Command(commandString, [], "Mode success!");
+    // } else if (command === "load_file") {
+    //   //load
+    //   if (commandArr.length >= 4 || commandArr.length <= 1) {
+    //     newCommand = new Command(
+    //       commandString,
+    //       [],
+    //       "Error: incorrect number of arguments given to load_file command"
+    //     );
+    //   } else {
+    //     //let loadMessage: string = load(commandArr, setHeader);
+    //     //newCommand = new Command(commandString, [], loadMessage);
+    //     setFilepath(commandArr[1]);
+    //   }
+    // } else if (command === "view") {
+    //   // view
+    //   newCommand = view(filepath, commandString);
+    // } else if (command === "search") {
+    //   // search
+    //   newCommand = search(filepath, hasHeader, commandString);
+    // } else {
+    //   // unrecognized command
+    //   newCommand = new Command(
+    //     commandString,
+    //     [],
+    //     "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
+    //   );
+    // }
+
   }
   /**
    * This returns the legend, input box, and submit button that allow the user to

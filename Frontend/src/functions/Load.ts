@@ -2,6 +2,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { validFiles } from "../functions/mockedJson";
 import { REPLFunction } from "../functions/REPLFunction";
+import {REPLInput} from "../components/REPLInput"
 
 /**
  * Load function which attempts to load a file from the mocked data and sets
@@ -14,7 +15,14 @@ import { REPLFunction } from "../functions/REPLFunction";
  * boolean in REPL.
  * @returns a message indicating either Load success! or an error.
  */
-export const load: REPLFunction = function (args: Array<string>, setHeader: Dispatch<SetStateAction<boolean>>) {
+// export const load: REPLFunction = function (args: Array<string>, setHeader: Dispatch<SetStateAction<boolean>>) {
+export const load: REPLFunction = function (args: Array<string>, 
+  hasHeader: any,
+  setHasHeader: Dispatch<SetStateAction<boolean>>, 
+  setCsvLoaded: Dispatch<SetStateAction<boolean>>, 
+  setHeader: Dispatch<SetStateAction<string[]>>, 
+  setCsvData: Dispatch<SetStateAction<string[][]>>,
+  setFilepath: Dispatch<SetStateAction<string>>) {
 
   // check that correct number of arguments is passed
   if (args.length >= 4 || args.length <= 1) {
@@ -24,7 +32,7 @@ export const load: REPLFunction = function (args: Array<string>, setHeader: Disp
     }
   
   let filepath = args[1];
-  setFilePath(filepath);
+  setFilepath(filepath);
   let filepathSplit: string[] = filepath.split("/");
   // Check that the file is in the correct directory (data)
   if (
@@ -38,14 +46,18 @@ export const load: REPLFunction = function (args: Array<string>, setHeader: Disp
       });
   }
   // By default, set hasHeader to false
+  let hasHeaderCopy = false
   if (args.length == 2) {
-    setHeader(false);
+    setHasHeader(false);
   } else if (args.length > 2) {
-    let hasHeader = args[2];
-    if (hasHeader.toLowerCase() === "true") {
-      setHeader(true);
-    } else if (hasHeader.toLowerCase() === "false") {
-      setHeader(false);
+    let header = args[2];
+    if (header.toLowerCase() === "true") {
+      setHasHeader(true);
+      
+      hasHeaderCopy = true
+    } else if (header.toLowerCase() === "false") {
+      setHasHeader(false);
+      hasHeaderCopy = false
     } else {
       return new Promise((resolve) => {
       resolve("Error: header parameter must be either true or false.");
@@ -54,13 +66,28 @@ export const load: REPLFunction = function (args: Array<string>, setHeader: Disp
     }
   }
   // Check that the filepath is in the list of valid files
-  if (validFiles.includes(filepath)) {
-    
-    return new Promise((resolve) => {
-      resolve("Load success!");
-      });
+    // TODO: Access CSVDATA from backend and check existence
+  async function callBackend():  Promise<string> {
+    const fetch1 = await fetch(`http://localhost:3232/loadCSV?filepath=${filepath}&hasHeader=${hasHeaderCopy}`)
+    const json1 = await fetch1.json()
+    let result: string = json1.result
+    // check that "result" from the responseMap is success. Otherwise return an error 
+    if (result === "success") {
+      setCsvLoaded(true);
+      setFilepath(filepath);
+      return new Promise((resolve) => {
+        resolve("Load success!");
+        });
+    } else {
+      let errorMessage: string = json1.err_msg
+      return new Promise((resolve) => {
+        resolve(errorMessage)
+     }); 
+    } 
   }
-  return new Promise((resolve) => {
-      resolve("Error: " + filepath + " not found")
-   }); 
+
+  return callBackend()
+
+   
 }
+

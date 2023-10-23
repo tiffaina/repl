@@ -10,5 +10,11 @@ import { Dispatch, SetStateAction, useState } from "react";
  * *NOT* contain the command-name prefix.
  */
 export interface REPLFunction {
-    (args: Array<string>, updater?: Dispatch<SetStateAction<boolean>>, hasheader?: boolean): Promise<string>;
+    (args: Array<string>, 
+        hasHeader?: boolean, 
+        setHasHeader?: Dispatch<SetStateAction<boolean>>, 
+        setCsvLoaded?: Dispatch<SetStateAction<boolean>>, 
+        setHeader?: Dispatch<SetStateAction<string[]>>, 
+        setCsvData?: Dispatch<SetStateAction<string[][]>>,
+        setFilepath?: Dispatch<SetStateAction<string>>): Promise<string>;
 }

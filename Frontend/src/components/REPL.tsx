@@ -3,6 +3,7 @@ import { useState } from "react";
 import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
 import { Command } from "../functions/Command";
+import React from "react";
 
 /**
  * This component is called as part of the App component.

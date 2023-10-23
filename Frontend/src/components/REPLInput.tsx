@@ -68,33 +68,29 @@ export function REPLInput(props: REPLInputProps) {
     commandHashMap.set("load_file", load);
     // commandHashMap.set("view", view);
     // commandHashMap.set("search", search);
-
-
-    async function getNewCommand(commandHashMap: Map<String, REPLFunction>) {
-      // get the corresponding REPLFunction for a certain command
-      let commandFunction = commandHashMap.get(command);
-      // function will return a promise<string> which we can display to REPlHistory
-      if (commandFunction) {
-        let args = commandArr.slice(1)
-        const result = await commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData)
-        newCommand = new Command(commandString, [], result)
-        return newCommand
-      
-      } else {
-        // unrecognized command
-        newCommand = new Command(
-          commandString,
-          [],
-          "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
-        );
-        return newCommand
-    }
-    }
+    
+    let commandFunction = commandHashMap.get(command);
+    if (commandFunction) {
+      let args = commandArr.slice(1)
+      let result = ""
+      commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData).then((response) => {result = response})
+      newCommand = new Command(commandString, [], result)
+    } else {
+      // unrecognized command
+      newCommand = new Command(
+        commandString,
+        [],
+        "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
+      );
+  }
 
     // Update state
-    setCount(count + 1);
-    props.setHistory([...props.history, getNewCommand(commandHashMap)]);
+    // setCount(count + 1);
+    // const pCommand = await getNewCommand(commandHashMap);
+    props.setHistory([...props.history, newCommand]);
+    // props.setHistory([...props.history, getNewCommand(commandHashMap)]);
     setCommandString("");
+  }
         
 
     // if (command === "mode") {
@@ -129,7 +125,6 @@ export function REPLInput(props: REPLInputProps) {
     //   );
     // }
 
-  }
   /**
    * This returns the legend, input box, and submit button that allow the user to
    * send commands and update the app's state, so that commands can be displayed by

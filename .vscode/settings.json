@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        "Backend/test/java",
+        "Backend/src/Server",
+        "Backend/src/main/java/edu/brown/cs/student/main/Server"
+    ]
+}

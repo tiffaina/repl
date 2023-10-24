@@ -1,28 +1,47 @@
 import { Command } from "../functions/Command";
+import { Dispatch, SetStateAction, useState } from "react";
 import { filepathMap } from "../functions/mockedJson";
+import { REPLFunction } from "../functions/REPLFunction";
+import {REPLInput} from "../components/REPLInput"
 
 /**
  * View function 
- * @param filepath string containing the filepath
- * @param commandString string containing the whole command given by the user
- * @returns a Command with the command string, a 2D array of strings if the view 
+ * @param args string containing the whole command given by the user 
+ * @returns a Promise with the command string, a 2D array of strings if the view 
  * attempt is successful, and a message indicating view success or an error. 
  */
-export function view(filepath: string, commandString: string) {
-  let result = filepathMap.get(filepath);
-  if (result === undefined) {
-    return new Command(
-      commandString,
-      [],
-      "Error: CSV file could not be viewed. Load correct filepath first."
-    );
+export const view: REPLFunction = function (args: Array<string> 
+  // hasHeader: any,
+  // setHasHeader: Dispatch<SetStateAction<boolean>> | undefined, 
+  // setCsvLoaded: Dispatch<SetStateAction<boolean>> | undefined, 
+  // setHeader: Dispatch<SetStateAction<string[]>> | undefined, 
+  // setCsvData: Dispatch<SetStateAction<string[][]>> | undefined,
+  // setFilepath: Dispatch<SetStateAction<string>> | undefined) 
+): Promise<string>  {
+    
+  
+  async function callBackend(): Promise<string> {
+    const fetch1 = await fetch(`http://localhost:3232/view`)
+    const json1 = await fetch1.json()
+    let result: string = json1.result
+    let data = json1.data // get csvdata
+    // check that "result" from the responseMap is success. Otherwise return an error 
+    if (result === "success") {
+      // if (setCsvData){
+      //   setCsvData(data)
+      // }
+      return new Promise((resolve) => {
+        resolve("View success!");
+        });
+    } else {
+      let errorMessage: string = json1.err_msg
+      return new Promise((resolve) => {
+        resolve(errorMessage)
+     }); 
+    } 
   }
-  if (result.length === 0) {
-    return new Command(
-      commandString,
-      result,
-      "View success! However, " + filepath + " appears to be an empty file."
-    );
-  }
-  return new Command(commandString, result, "View success!");
+
+  return callBackend()
+  
+  // return new Command(commandString, result, "View success!");
 }

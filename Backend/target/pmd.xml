@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd" version="6.46.0" timestamp="2023-09-17T18:21:20.767">
+<file name="/Users/selenawilliams/Desktop/classes/cs32/csv-selenajwilliams/src/main/java/edu/brown/cs/student/main/Main.java">
+<violation beginline="14" endline="14" begincolumn="25" endcolumn="28" rule="UnusedFormalParameter" ruleset="Best Practices" package="edu.brown.cs.student.main" class="Main" method="Main" variable="args" externalInfoUrl="https://pmd.github.io/pmd-6.46.0/pmd_rules_java_bestpractices.html#unusedformalparameter" priority="3">
+Avoid unused constructor parameters such as 'args'.
+</violation>
+</file>
+<file name="/Users/selenawilliams/Desktop/classes/cs32/csv-selenajwilliams/src/main/java/edu/brown/cs/student/main/Parse.java">
+<violation beginline="54" endline="59" begincolumn="11" endcolumn="11" rule="CollapsibleIfStatements" ruleset="Design" package="edu.brown.cs.student.main" class="Parse" method="parse" externalInfoUrl="https://pmd.github.io/pmd-6.46.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+</pmd>

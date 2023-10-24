@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Search.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.main</a> &gt; <span class="el_source">Search.java</span></div><h1>Search.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.main;
+
+import edu.brown.cs.student.main.rowtype.StringList;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Search class searches a CSV file for a search value. Users can search the whole file, or can
+ * narrow their search to a specific column by passing in the column name or column index they want
+ * to refine their search to.
+ */
+public class Search {
+  private List&lt;List&lt;String&gt;&gt; matchingRows;
+
+<span class="fc" id="L17">  public Search() {</span>
+<span class="fc" id="L18">    this.matchingRows = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">  }</span>
+  /**
+   * Search method searches a CSV for a given value.
+   *
+   * @param csvFilePath the csv filename and path
+   * @param searchVal the value to search for
+   * @param hasHeader a boolean indicating whether or not the CSV has a header
+   */
+  public void search(String csvFilePath, String searchVal, boolean hasHeader) {
+<span class="fc" id="L28">    System.out.println(&quot;Searching &quot; + csvFilePath + &quot; for &quot; + searchVal);</span>
+    try {
+      // create the reader object &amp; parse file
+<span class="fc" id="L31">      FileReader reader = new FileReader(csvFilePath);</span>
+<span class="fc" id="L32">      StringList strList = new StringList();</span>
+<span class="fc" id="L33">      Parse parser = new Parse(reader, strList, hasHeader);</span>
+<span class="fc" id="L34">      List&lt;List&lt;String&gt;&gt; parsedCSV = parser.getDataRows();</span>
+<span class="fc" id="L35">      List&lt;List&lt;String&gt;&gt; matches = new ArrayList&lt;&gt;();</span>
+
+      // go through each row searching for the search value
+      // if there's a header, if a mtch with the header  skip the first row
+<span class="fc bfc" id="L39" title="All 2 branches covered.">      if (hasHeader) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for (List&lt;String&gt; row : parsedCSV) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">          if (row.equals(parsedCSV.get(0))) {</span>
+<span class="fc" id="L42">            continue;</span>
+          }
+
+          // go through all the rows searching for matches
+<span class="fc bfc" id="L46" title="All 2 branches covered.">          for (String val : row) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (val.equalsIgnoreCase(searchVal)) {</span>
+<span class="fc" id="L48">              matches.add(row);</span>
+            }
+<span class="fc" id="L50">          }</span>
+<span class="fc" id="L51">        }</span>
+      } else { // if no header, search through every val in every row for a match
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (List&lt;String&gt; row : parsedCSV) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">          for (String val : row) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (val.equalsIgnoreCase(searchVal)) {</span>
+<span class="fc" id="L56">              matches.add(row);</span>
+            }
+<span class="fc" id="L58">          }</span>
+<span class="fc" id="L59">        }</span>
+      }
+<span class="fc" id="L61">      this.matchingRows = matches;</span>
+      // if the search value was not found, print out a user-readable
+      // statement instead of empty brackets
+<span class="fc bfc" id="L64" title="All 2 branches covered.">      if (matches.isEmpty()) {</span>
+<span class="fc" id="L65">        System.out.println(&quot;No matches were found for &quot; + searchVal);</span>
+<span class="fc" id="L66">        return;</span>
+      }
+<span class="fc" id="L68">      System.out.println(matches);</span>
+      // if the file is not found, print out user-readable statement
+<span class="nc" id="L70">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L71">      System.err.println(</span>
+          &quot;CSV file not found. Remember to include the relative&quot;
+              + &quot; path for the file as well. Please check for typos and search again.&quot;);
+<span class="nc" id="L74">      System.exit(1);</span>
+<span class="fc" id="L75">    }</span>
+<span class="fc" id="L76">  }</span>
+
+  /**
+   * Search method searches a CSV for a given search value, refining the search to search only the
+   * column matching the column name for each row of the CSV.
+   *
+   * @param csvFilePath the csv filename and path
+   * @param searchVal the value to search for
+   * @param colName the column name to refine the search by
+   */
+  public void search(String csvFilePath, String searchVal, String colName) {
+<span class="fc" id="L87">    System.out.println(</span>
+        &quot;Searching &quot; + csvFilePath + &quot; for &quot; + searchVal + &quot; in column with title: &quot; + colName);
+    try {
+<span class="fc" id="L90">      FileReader reader = new FileReader(csvFilePath);</span>
+<span class="fc" id="L91">      StringList strList = new StringList();</span>
+<span class="fc" id="L92">      Parse parser = new Parse(reader, strList, true);</span>
+
+<span class="fc" id="L94">      parser.parse(reader, strList, true);</span>
+<span class="fc" id="L95">      List&lt;List&lt;String&gt;&gt; parsedCSV = parser.getDataRows();</span>
+<span class="fc" id="L96">      List&lt;List&lt;String&gt;&gt; matches = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L98">      List&lt;String&gt; colTitles = parsedCSV.get(0);</span>
+<span class="fc" id="L99">      System.out.println(&quot;col titles is &quot; + colTitles);</span>
+<span class="fc" id="L100">      Integer colIdx = colTitles.indexOf(colName);</span>
+<span class="fc" id="L101">      System.out.println(&quot;the col idx is &quot; + colIdx);</span>
+
+<span class="fc bfc" id="L103" title="All 2 branches covered.">      for (List&lt;String&gt; row : parsedCSV) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (row.get(colIdx).equalsIgnoreCase(searchVal)) { // checks val at col</span>
+<span class="fc" id="L105">          matches.add(row);</span>
+        }
+<span class="fc" id="L107">      }</span>
+<span class="fc" id="L108">      this.matchingRows = matches;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">      if (matches.isEmpty()) {</span>
+<span class="fc" id="L110">        System.out.println(&quot;No matches were found for &quot; + searchVal);</span>
+<span class="fc" id="L111">        return;</span>
+      }
+<span class="fc" id="L113">      System.out.println(matches); // print out all the matches</span>
+<span class="nc" id="L114">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L115">      System.err.println(</span>
+          &quot;CSV file not found. Remember to include the relative&quot;
+              + &quot; path for the file as well. Please check for typos and search again.&quot;);
+<span class="nc" id="L118">      System.exit(1);</span>
+<span class="fc" id="L119">    }</span>
+<span class="fc" id="L120">  }</span>
+
+  /**
+   * Search method searches a CSV for a given search value, refining the search to search only the
+   * column with index matching the colIdx for each row of the CSV.
+   *
+   * @param csvFilePath the csv filename and path
+   * @param searchVal the value to search for
+   * @param colIdx the column index to refine the search by
+   */
+  public void search(String csvFilePath, String searchVal, int colIdx) {
+<span class="fc" id="L131">    System.out.println(</span>
+        &quot;Searching &quot; + csvFilePath + &quot; for &quot; + searchVal + &quot; in column with index: &quot; + colIdx);
+    try {
+<span class="fc" id="L134">      FileReader reader = new FileReader(csvFilePath);</span>
+<span class="fc" id="L135">      StringList strList = new StringList();</span>
+<span class="fc" id="L136">      Parse parser = new Parse(reader, strList, true);</span>
+
+<span class="fc" id="L138">      parser.parse(reader, strList, true);</span>
+<span class="fc" id="L139">      List&lt;List&lt;String&gt;&gt; parsedCSV = parser.getDataRows();</span>
+<span class="fc" id="L140">      List&lt;List&lt;String&gt;&gt; matches = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L142">      List&lt;String&gt; colTitles = parsedCSV.get(0);</span>
+<span class="fc" id="L143">      System.out.println(&quot;col titles is &quot; + colTitles);</span>
+
+      // checking the colIdx for out of bounds errors
+<span class="fc bfc" id="L146" title="All 2 branches covered.">      if (colIdx &gt; colTitles.size() - 1) {</span>
+<span class="fc" id="L147">        throw new IndexOutOfBoundsException(</span>
+            &quot;The column index is greater than the&quot;
+                + &quot; number of columns in the CSV. Please check for typos and try again&quot;);
+      }
+<span class="fc bfc" id="L151" title="All 2 branches covered.">      if (colIdx &lt; 0) {</span>
+<span class="fc" id="L152">        throw new IndexOutOfBoundsException(</span>
+            &quot;The column index cannot be negative. &quot;
+                + &quot;Remember, the column index starts at 0 and goes up to the # of &quot;
+                + &quot;columns in the CSV -1. Please check for typos and try again.&quot;);
+      }
+
+      // iterate through each row, searching only the relevant column for matches
+      // if there is a match, add the row to the list of matches, which will be
+      // printed out
+<span class="fc bfc" id="L161" title="All 2 branches covered.">      for (List&lt;String&gt; row : parsedCSV) {</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (row.get(colIdx).equalsIgnoreCase(searchVal)) {</span>
+<span class="fc" id="L163">          matches.add(row);</span>
+        }
+<span class="fc" id="L165">      }</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">      if (matches.isEmpty()) {</span>
+<span class="fc" id="L167">        System.out.println(&quot;No matches were found for &quot; + searchVal);</span>
+<span class="fc" id="L168">        return;</span>
+      }
+<span class="fc" id="L170">      this.matchingRows = matches;</span>
+<span class="fc" id="L171">      System.out.println(matches); // print out all the matches</span>
+<span class="nc" id="L172">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L173">      System.err.println(</span>
+          &quot;CSV file not found. Remember to include the relative&quot;
+              + &quot; path for the file as well. Please check for typos and search again.&quot;);
+<span class="nc" id="L176">      System.exit(1);</span>
+<span class="fc" id="L177">    }</span>
+<span class="fc" id="L178">  }</span>
+
+  /**
+   * getMatches method returns all the matching rows. It is an optional feature added for testing.
+   * It also provides opportunities for searching to be used in other context (extensibility)
+   * including by developers or anyone who may wish to access the matching rows that a search
+   * yields.
+   *
+   * @return a list of the matching rows
+   */
+  public List&lt;List&lt;String&gt;&gt; getMatches() {
+<span class="fc" id="L189">    return this.matchingRows;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

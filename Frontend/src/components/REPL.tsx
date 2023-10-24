@@ -15,7 +15,7 @@ import React from "react";
 export default function REPL() {
   // These constants manage the state that sub-components have access to
   const [history, setHistory] = useState<Command[]>([]);
-  const [mode, setMode] = useState<boolean>(true);
+  const [mode, setMode] = useState<string>("brief");
 
   return (
     <div className="repl">

@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+s0,edu.brown.cs.student.main,Main,29,0,0,0,8,0,3,0,3,0
+s0,edu.brown.cs.student.main,Search,18,315,0,34,9,78,0,22,0,5
+s0,edu.brown.cs.student.main,Parse,13,64,0,6,6,24,0,7,0,4
+s0,edu.brown.cs.student.main.rowtype,IntegerList,15,31,0,2,6,9,0,3,0,2
+s0,edu.brown.cs.student.main.rowtype,StringList,0,5,0,0,0,2,0,2,0,2
+s0,edu.brown.cs.student.main.rowtype,CreatorFromRow.FactoryFailureException,10,0,0,0,3,0,1,0,1,0

@@ -16,13 +16,14 @@ import {REPLInput} from "../components/REPLInput"
  * @returns a message indicating either Load success! or an error.
  */
 // export const load: REPLFunction = function (args: Array<string>, setHeader: Dispatch<SetStateAction<boolean>>) {
-export const load: REPLFunction = function (args: Array<string>, 
-  hasHeader: any,
-  setHasHeader: Dispatch<SetStateAction<boolean>> | undefined, 
-  setCsvLoaded: Dispatch<SetStateAction<boolean>> | undefined, 
-  setHeader: Dispatch<SetStateAction<string[]>> | undefined, 
-  setCsvData: Dispatch<SetStateAction<string[][]>> | undefined,
-  setFilepath: Dispatch<SetStateAction<string>> | undefined) : Promise<string> {
+export const load: REPLFunction = function (args: Array<string> 
+  // hasHeader: any,
+  // setHasHeader: Dispatch<SetStateAction<boolean>> | undefined, 
+  // setCsvLoaded: Dispatch<SetStateAction<boolean>> | undefined, 
+  // setHeader: Dispatch<SetStateAction<string[]>> | undefined, 
+  // setCsvData: Dispatch<SetStateAction<string[][]>> | undefined,
+  // setFilepath: Dispatch<SetStateAction<string>> | undefined) 
+): Promise<string> {
 
     
 
@@ -34,9 +35,9 @@ export const load: REPLFunction = function (args: Array<string>,
     }
   
   let filepath = args[1];
-  if (setFilepath) {
-    setFilepath(filepath);
-  }
+  // if (setFilepath) {
+  //   setFilepath(filepath);
+  // }
   let filepathSplit: string[] = filepath.split("/");
   // Check that the file is in the correct directory (data)
   if (
@@ -52,18 +53,18 @@ export const load: REPLFunction = function (args: Array<string>,
   // By default, set hasHeader to false
   let hasHeaderCopy = false
   if (args.length == 2) {
-    if (setHasHeader) {
-      setHasHeader(false);}
+    // if (setHasHeader) {
+    //   setHasHeader(false);}
   } else if (args.length > 2) {
     let header = args[2];
     if (header.toLowerCase() === "true") {
-      if (setHasHeader){
-      setHasHeader(true);}
+      // if (setHasHeader){
+      // setHasHeader(true);}
       
       hasHeaderCopy = true
     } else if (header.toLowerCase() === "false") {
-      if (setHasHeader) {
-      setHasHeader(false);}
+      // if (setHasHeader) {
+      // setHasHeader(false);}
       hasHeaderCopy = false
     } else {
       return new Promise((resolve) => {
@@ -80,8 +81,8 @@ export const load: REPLFunction = function (args: Array<string>,
     let result: string = json1.result
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
-      if (setCsvLoaded) {setCsvLoaded(true);}
-      if (setFilepath) {setFilepath(filepath);}
+      // if (setCsvLoaded) {setCsvLoaded(true);}
+      // if (setFilepath) {setFilepath(filepath);}
       return new Promise((resolve) => {
         resolve("Load success!");
         });

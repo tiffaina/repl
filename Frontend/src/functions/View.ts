@@ -10,13 +10,14 @@ import {REPLInput} from "../components/REPLInput"
  * @returns a Promise with the command string, a 2D array of strings if the view 
  * attempt is successful, and a message indicating view success or an error. 
  */
-export const view: REPLFunction = function (args: Array<string>, 
-  hasHeader: any,
-  setHasHeader: Dispatch<SetStateAction<boolean>> | undefined, 
-  setCsvLoaded: Dispatch<SetStateAction<boolean>> | undefined, 
-  setHeader: Dispatch<SetStateAction<string[]>> | undefined, 
-  setCsvData: Dispatch<SetStateAction<string[][]>> | undefined,
-  setFilepath: Dispatch<SetStateAction<string>> | undefined) : Promise<string>  {
+export const view: REPLFunction = function (args: Array<string> 
+  // hasHeader: any,
+  // setHasHeader: Dispatch<SetStateAction<boolean>> | undefined, 
+  // setCsvLoaded: Dispatch<SetStateAction<boolean>> | undefined, 
+  // setHeader: Dispatch<SetStateAction<string[]>> | undefined, 
+  // setCsvData: Dispatch<SetStateAction<string[][]>> | undefined,
+  // setFilepath: Dispatch<SetStateAction<string>> | undefined) 
+): Promise<string>  {
     
   
   async function callBackend(): Promise<string> {
@@ -26,9 +27,9 @@ export const view: REPLFunction = function (args: Array<string>,
     let data = json1.data // get csvdata
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
-      if (setCsvData){
-        setCsvData(data)
-      }
+      // if (setCsvData){
+      //   setCsvData(data)
+      // }
       return new Promise((resolve) => {
         resolve("View success!");
         });

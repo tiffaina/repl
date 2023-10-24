@@ -7,6 +7,7 @@ import { view } from "../functions/View";
 import { search } from "../functions/Search";
 import { REPLFunction } from "../functions/REPLFunction";
 import React from "react";
+import { mode } from "../functions/Mode";
 
 /**
  * These are the props for the REPLInput component.
@@ -17,9 +18,9 @@ import React from "react";
  */
 export interface REPLInputProps {
   history: Command[];
-  mode: boolean;
+  mode: string;
   setHistory: Dispatch<SetStateAction<Command[]>>;
-  setMode: Dispatch<SetStateAction<boolean>>;
+  setMode: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -60,16 +61,23 @@ export function REPLInput(props: REPLInputProps) {
     let command: String = commandArr[0];
     let newCommand: Command;
 
-    let commandHashMap = new Map<String, REPLFunction>();
-    // populate the commandHashMap with the commands as keys mapped to their 
-    // corresponding REPLFunction as values
+    // let commandHashMap = new Map<String, REPLFunction>();
+    // // populate the commandHashMap with the commands as keys mapped to their 
+    // // corresponding REPLFunction as values
 
-    // commandHashMap.set("mode", );
-    commandHashMap.set("load_file", load);
-    commandHashMap.set("view", view);
+    // // commandHashMap.set("mode", );
+    // commandHashMap.set("load_file", load);
+    // commandHashMap.set("view", view);
     // commandHashMap.set("search", search);
+
+    // mode setters: setMode
+    new CommandRegistry; 
+    modeSetterMap["setMode"] = props.setMode;
+    registerCommand("mode", mode);
+
+    registerCommand("load_file", load, );
     
-    let commandFunction = commandHashMap.get(command);
+    let commandFunction = executeCommand(commandName, args, )
     if (commandFunction) {
       let args = commandArr.slice(1)
       let result = ""

@@ -11,7 +11,7 @@ import React from "react";
  */
 interface REPLHistoryProps {
   history: Command[];
-  mode: boolean;
+  mode: string;
 }
 
 /**
@@ -41,7 +41,7 @@ export function REPLHistory(props: REPLHistoryProps) {
   return (
     <div className="repl-history">
       {props.history.map((command, index) =>
-        props.mode ? (
+        (props.mode === "brief") ? (
           <div className="leftAlign">
             <p aria-label={"commandMessage" + String(index)}>
               {command.message}

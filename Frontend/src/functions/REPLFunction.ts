@@ -11,5 +11,5 @@ import { Dispatch, SetStateAction, useState } from "react";
  */
 export interface REPLFunction {
   (args: string[], 
-    setters: Map<string, Dispatch<SetStateAction<any>>> ): Promise<string>;
+    setters: Map<string, Dispatch<SetStateAction<any>>> ): Promise<[string, string[][]]>;
 }

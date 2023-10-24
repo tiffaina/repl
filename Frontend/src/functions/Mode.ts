@@ -10,24 +10,24 @@ import {REPLInput} from "../components/REPLInput"
  * @returns a Promise with the command string, a 2D array of strings if the view 
  * attempt is successful, and a message indicating view success or an error. 
  */
-export const mode: REPLFunction = function (args: Array<string>, setters: Map<string, Dispatch<SetStateAction<any>>>,
-): Promise<string>  {
+export const mode: REPLFunction = function (args: Array<string>, 
+        setters: Map<string, Dispatch<SetStateAction<any>>>,)
+        : Promise<[string, string[][]]>  {
         //   // mode
         //   props.setMode(!props.mode);
         //   newCommand = new Command(commandString, [], "Mode success!");
     
        // TODO need: setMode 
+    let setMode = setters.get("setMode") // : Dispatch<SetStateAction<boolean>> 
 
-    let setMode: Dispatch<SetStateAction<boolean>> = setters.get("setMode")
-    const [filePathSearch, setMode] = useState<string>("");
-        
-
-
-    if (setters.get("setMode")) {
-        
-    }
-  
-    return new Promise((resolve) => {
-        resolve("Mode success!");
+    if (setMode) {
+        setMode("verbose") // TODO fix this
+        return new Promise((resolve) => {
+        resolve(["Mode success!", []]);
         });
+    } else {
+        return new Promise((resolve) => {
+        resolve(["Mode failed", []]);
+        });
+    }
 }

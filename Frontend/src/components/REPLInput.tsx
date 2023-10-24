@@ -66,7 +66,7 @@ export function REPLInput(props: REPLInputProps) {
 
     // commandHashMap.set("mode", );
     commandHashMap.set("load_file", load);
-    // commandHashMap.set("view", view);
+    commandHashMap.set("view", view);
     // commandHashMap.set("search", search);
     
     let commandFunction = commandHashMap.get(command);
@@ -74,7 +74,7 @@ export function REPLInput(props: REPLInputProps) {
       let args = commandArr.slice(1)
       let result = ""
       commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData).then((response) => {result = response})
-      newCommand = new Command(commandString, [], result)
+      newCommand = new Command(commandString, csvdata, result)
     } else {
       // unrecognized command
       newCommand = new Command(

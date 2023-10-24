@@ -1,0 +1,7 @@
+edu/brown/cs/student/main/Search.class
+edu/brown/cs/student/main/Main.class
+edu/brown/cs/student/main/rowtype/CreatorFromRow.class
+edu/brown/cs/student/main/Parse.class
+edu/brown/cs/student/main/rowtype/CreatorFromRow$FactoryFailureException.class
+edu/brown/cs/student/main/rowtype/StringList.class
+edu/brown/cs/student/main/rowtype/IntegerList.class

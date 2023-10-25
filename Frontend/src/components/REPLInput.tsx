@@ -8,6 +8,7 @@ import { search } from "../functions/Search";
 import { REPLFunction } from "../functions/REPLFunction";
 import React from "react";
 import { mode } from "../functions/Mode";
+import CommandRegistry from './CommandRegistration';
 
 /**
  * These are the props for the REPLInput component.
@@ -39,7 +40,7 @@ export function REPLInput(props: REPLInputProps) {
   const [filepath, setFilepath] = useState<string>("");
   const [hasHeader, setHasHeader] = useState<boolean>(false);
   const [csvLoaded, setCsvLoaded] = useState<boolean>(false);
-  const [csvdata, setCsvData] = useState<string[][]>([[]]);
+  // const [csvdata, setCsvData] = useState<string[][]>([[]]);
   const [header, setHeader] = useState<string[]>([]);
   const [filePathSearch, setFilePath] = useState<string>("");
   
@@ -57,47 +58,21 @@ export function REPLInput(props: REPLInputProps) {
   // This function is triggered when the button is clicked
   // It depending on the command text, it creates a Command object
   function handleSubmit(commandString: string) {
-    let commandArr: Array<string> = commandString.split(" ");
-    let command: String = commandArr[0];
+    let commandArr: string[] = commandString.split(" ");
+    let command: string = commandArr[0];
     let newCommand: Command;
 
-    // let commandHashMap = new Map<String, REPLFunction>();
-    // // populate the commandHashMap with the commands as keys mapped to their 
-    // // corresponding REPLFunction as values
-
-    // // commandHashMap.set("mode", );
-    // commandHashMap.set("load_file", load);
-    // commandHashMap.set("view", view);
-    // commandHashMap.set("search", search);
-
-    // mode setters: setMode
-    new CommandRegistry; 
-    modeSetterMap["setMode"] = props.setMode;
-    registerCommand("mode", mode);
-
-    registerCommand("load_file", load, );
-    
-    let commandFunction = executeCommand(commandName, args, )
-    if (commandFunction) {
-      let args = commandArr.slice(1)
-      let result = ""
-      commandFunction(args, hasHeader, setHasHeader, setCsvLoaded, setHeader, setCsvData).then((response) => {result = response})
-      newCommand = new Command(commandString, csvdata, result)
-    } else {
-      // unrecognized command
-      newCommand = new Command(
-        commandString,
-        [],
-        "Error: Please provide a valid command. Valid commands: mode, load_file <csv-file-path>, view, or search <column> <value>"
-      );
-  }
-
-    // Update state
-    // setCount(count + 1);
-    // const pCommand = await getNewCommand(commandHashMap);
-    props.setHistory([...props.history, newCommand]);
-    // props.setHistory([...props.history, getNewCommand(commandHashMap)]);
-    setCommandString("");
+    // get mapped command function and execute it
+    let result = CommandRegistry.executeCommand(command, commandArr)
+    .then(result => {
+      if (result[0] === "Mode success!") {
+        let newMode = props.mode === "brief" ? "verbose" : "brief";
+        props.setMode(newMode);
+      } 
+      newCommand = new Command(commandString, result[1], result[0]);
+      props.setHistory([...props.history, newCommand]);
+      setCommandString("");
+    })
   }
         
 

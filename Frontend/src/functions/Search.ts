@@ -1,8 +1,8 @@
-/**
- * Search function
- */
+
 import { Command } from "../functions/Command";
 import { validFiles, searchMap } from "../functions/mockedJson";
+import { REPLFunction } from "../functions/REPLFunction";
+import {REPLInput} from "../components/REPLInput"
 
 /**
  * Search function
@@ -14,73 +14,23 @@ import { validFiles, searchMap } from "../functions/mockedJson";
  * @returns a Command with the command string, the result of searching, and a
  * message indicating search success or an error.
  */
-export function search(
-  filepath: string,
-  hasHeader: boolean,
-  commandString: string
-) {
-  if (!validFiles.includes(filepath)) {
-    return new Command(
-      commandString,
-      [],
-      "Error: CSV file could not be searched. Load correct filepath first."
-    );
-  }
-  // Use a regex to split the commandString
-  let commandStringReg: RegExpMatchArray | null =
-    commandString.match(/(?:[^\s"]+|"[^"]*")+/g);
-  if (commandStringReg == null) {
-    return new Command(
-      commandString,
-      [],
-      "Error: incorrect number of arguments given to search command. Two arguments expected: <column> <value>."
-    );
-  }
-  // Remove the quotation marks from the split strings
-  let commandStringSplit = commandStringReg.map((segment) => {
-    return segment.replaceAll('"', "");
-  });
-  if (commandStringSplit.length !== 3) {
-    return new Command(
-      commandString,
-      [],
-      "Error: incorrect number of arguments given to search command. Two arguments expected: <column> <value>."
-    );
-  }
-  // Attempt to find the searched data in the loaded CSV data
-  let result = searchMap.get(
-    filepath +
-      " " +
-      commandStringSplit[1] +
-      " " +
-      commandStringSplit[2] +
-      " " +
-      String(hasHeader)
-  );
-  if (result === undefined) {
-    if (!hasHeader && isNaN(parseInt(commandStringSplit[1]))) {
-      return new Command(
-        commandString,
-        [],
-        'Error: search unsuccessful, could not search non-numeric column ID "' +
-          commandStringSplit[1] +
-          '" in file with no headers.'
-      );
-    }
-    return new Command(
-      commandString,
-      [],
-      "Error: search unsuccessful, could not find the value in the given column."
-    );
-  }
-  if (result.length === 0) {
-    return new Command(
-      commandString,
-      result,
-      'Search success! However, no rows matching the search criteria "' +
-        commandString +
-        '" were found.'
-    );
-  }
-  return new Command(commandString, result, "Search success!");
+
+export const search: REPLFunction = async function (args: Array<string>): Promise<[string, string[][]]>  {
+  let colIdentifier = args[1]
+  let searchVal = args[2]
+  
+  const fetch1 = await fetch("http://localhost:3232/searchCSV?searchVal="+searchVal+"&colIdentifier="+colIdentifier)
+  const json1 = await fetch1.json()
+  let result: string = json1.result
+    // check that "result" from the responseMap is success. Otherwise return an error 
+  if (result === "success") {
+      return new Promise((resolve) => {
+        resolve(["View success!", json1.data]);
+        });
+    } else {
+      let errorMessage: string = json1.err_msg
+      return new Promise((resolve) => {
+        resolve(["errorMessage", []])
+     }); 
+    } 
 }

@@ -7,15 +7,26 @@ class CommandRegistry {
 
   static registerCommand(commandName: string, commandFunction: REPLFunction): void {
     CommandRegistry.registry.set(commandName, commandFunction);
+    
   }
 
-  static executeCommand(commandName: string, args: string[], setters: Map<string, Dispatch<SetStateAction<any>>>): Promise<string> {
+  static async executeCommand(commandName: string, args: string[]): Promise<[string, string[][]]> {
     const commandFunction = CommandRegistry.registry.get(commandName);
     if (commandFunction) {
-      return commandFunction(args, setters);
+      try {
+        // Wait for the commandFunction to complete and return its result
+        const result = await commandFunction(args);
+        return result;
+      } catch (error) {
+        return Promise.reject([`Error executing command '${commandName}': ${error}`, []]);
+      }
     } else {
-      return Promise.reject(`Command '${commandName}' not found.`);
+      return Promise.reject([`Command '${commandName}' not found.`, []]);
     }
+  }
+
+  static getRegistry(): Map<string, REPLFunction> {
+    return CommandRegistry.registry;
   }
 }
 

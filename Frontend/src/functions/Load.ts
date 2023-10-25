@@ -16,14 +16,7 @@ import {REPLInput} from "../components/REPLInput"
  * @returns a message indicating either Load success! or an error.
  */
 // export const load: REPLFunction = function (args: Array<string>, setHeader: Dispatch<SetStateAction<boolean>>) {
-export const load: REPLFunction = function (args: Array<string> 
-  // hasHeader: any,
-  // setHasHeader: Dispatch<SetStateAction<boolean>> | undefined, 
-  // setCsvLoaded: Dispatch<SetStateAction<boolean>> | undefined, 
-  // setHeader: Dispatch<SetStateAction<string[]>> | undefined, 
-  // setCsvData: Dispatch<SetStateAction<string[][]>> | undefined,
-  // setFilepath: Dispatch<SetStateAction<string>> | undefined) 
-): Promise<[string, string[][]]> {
+export const load: REPLFunction = function (args: Array<string>): Promise<[string, string[][]]> {
 
     
 
@@ -82,8 +75,6 @@ export const load: REPLFunction = function (args: Array<string>
     let result: string = json1.result
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
-      // if (setCsvLoaded) {setCsvLoaded(true);}
-      // if (setFilepath) {setFilepath(filepath);}
       const resultArray: [string, string[][]] = [result, []];
       return resultArray;
     } else {

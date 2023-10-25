@@ -10,6 +10,5 @@ import { Dispatch, SetStateAction, useState } from "react";
  * *NOT* contain the command-name prefix.
  */
 export interface REPLFunction {
-  (args: string[], 
-    setters: Map<string, Dispatch<SetStateAction<any>>> ): Promise<[string, string[][]]>;
+  (args: string[]): Promise<[string, string[][]]>;
 }

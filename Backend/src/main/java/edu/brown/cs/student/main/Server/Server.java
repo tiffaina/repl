@@ -57,14 +57,11 @@ public class Server {
 
 
   }
-
   public static void main(String[] args) throws DatasourceException {
 
     Server server = new Server(new ACSAPIDataSource());
     System.out.println("Server started; exiting main...");
-
   }
-
   /**
    * setter to set CSV data, so that loadHandler can pass data to server class
    * @param loadedData    the loaded CSV to initialize the csvData instance var to
@@ -72,7 +69,6 @@ public class Server {
   public static void setCSVData(List<List<String>> loadedData) {
     csvData = loadedData;
   }
-
   /**
    * setter to set CSV header, so that loadHandler can pass data to server class
    * @param loadedHeader    the csv header to initialize the csvData instance var to
@@ -80,8 +76,6 @@ public class Server {
   public static void setHeader(List<String> loadedHeader) {
     header = loadedHeader;
   }
-
-
   /**
    * setter to let the server class know whether the csv data contains a header
    * @param headerBool      a boolean representing if a header is present or not
@@ -89,7 +83,6 @@ public class Server {
   public static void setContainsHeader(boolean headerBool) {
     containsHeader = headerBool;
   }
-
   /**
    * accesses CSV data
    * @return csvData object representing parsed csv
@@ -97,7 +90,6 @@ public class Server {
   public static List<List<String>> getCSVData() {
     return csvData;
   }
-
   /**
    * accesses csv header
    * @return    header object representing csv header
@@ -105,7 +97,6 @@ public class Server {
   public static List<String> getHeader() {
     return header;
   }
-
   /**
    * accesses a boolean representing if the csv has a header or not
    * @return      a boolean of if the header exists

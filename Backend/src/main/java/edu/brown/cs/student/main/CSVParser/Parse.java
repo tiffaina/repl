@@ -47,27 +47,23 @@ public class Parse<T> {
       BufferedReader bReader = new BufferedReader(reader);
       /* Go through each line in the reader object, process it, & add it to dataRows. */
       String line;
-      int counter = 0;
+      if (hasHeader) {
+      // Skip the header row
+        String headerLine = bReader.readLine();
+        List<String> headers = splitCSVRow(headerLine);
+        this.header = headers;
+      }
       while ((line = bReader.readLine()) != null) {
         // breaks row into an array of strings
-        List<String> rowData = Arrays.asList(regexSplitCSVRow.split(line));
+        List<String> rowData = splitCSVRow(line);
         // if there is a header, save it to dataRows without converting it
         // through the create method
-
-        if (hasHeader) {
-          if (counter == 0) {
-            List<String> heading = new ArrayList<>(List.of(line.split(",")));
-            this.header = heading;
-            counter++;
-            continue;
-          }
-        }
+      
 
         try {
           // process the rest of the rows using create() & add them to dataRows
           T processedRow = creatorFromRow.create(rowData);
           this.dataRows.add(processedRow);
-          counter++;
         } catch (CreatorFromRow.FactoryFailureException e) {
           System.err.println(
               "Factory Failure Exception occurred. Row cannot be "
@@ -93,5 +89,17 @@ public class Parse<T> {
 
   public List<String> getHeader() {
     return this.header;
+  
+  }
+
+  /**
+   * @param row csv data row processess
+   * @return each row element as a string in a list
+   */
+  private List<String> splitCSVRow(String row) {
+    Pattern regexSplitCSVRow = Pattern.compile(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*(?![^\\\"]*\\\"))");
+    String[] result = regexSplitCSVRow.split(row);
+
+    return Arrays.stream(result).toList();
   }
 }

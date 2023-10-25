@@ -126,7 +126,9 @@ public class LoadCSVHandler<T> implements Route {
       Map<String, Object> responseMap = new HashMap<>();
       responseMap.put("result", "error_datasource");
       responseMap.put("filepath", this.filepath);
-      responseMap.put("err_msg", "some kind of error occured while attempting to load");
+      responseMap.put("details", e.getMessage());
+      System.out.println(e.getMessage());
+      // responseMap.put("err_msg", "some kind of error occured while attempting to load");
       return new LoadFailureResponse(responseMap).serialize();
     }
 

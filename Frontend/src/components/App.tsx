@@ -1,5 +1,11 @@
 import "../styles/App.css";
 import REPL from "./REPL";
+import CommandRegistry from './CommandRegistration';
+import { mode } from "../functions/Mode";
+import { load } from "../functions/Load";
+import { view } from "../functions/View";
+import { search } from "../functions/Search";
+
 
 /**
  * This is the highest level component!
@@ -7,6 +13,11 @@ import REPL from "./REPL";
  * the REPLHistory and the REPLInput areas!
  */
 function App() {
+    CommandRegistry.registerCommand('mode', mode);
+    CommandRegistry.registerCommand('load_file', load);
+    CommandRegistry.registerCommand('view', view);
+    CommandRegistry.registerCommand('search', search);
+
   return (
     <div className="App">
       <div className="App-header">

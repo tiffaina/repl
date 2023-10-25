@@ -12,18 +12,21 @@ import {REPLInput} from "../components/REPLInput"
  */
 export const view: REPLFunction = async function (args: Array<string>): Promise<[string, string[][]]>  {
   
-    const fetch1 = await fetch(`http://localhost:3232/view`)
+    const fetch1 = await fetch("http://localhost:3232/viewCSV")
     const json1 = await fetch1.json()
-    let result: string = json1.result
+    console.log('Full Response:', json1);
+    let result: string = json1.responseMap.result
     // check that "result" from the responseMap is success. Otherwise return an error 
+    console.log(result)
+    console.log(json1.responseMap.data)
     if (result === "success") {
       return new Promise((resolve) => {
-        resolve(["View success!", json1.data]);
+        resolve(["View success!", json1.responseMap.data]);
         });
     } else {
-      let errorMessage: string = json1.err_msg
-      return new Promise((resolve) => {
-        resolve(["errorMessage", []])
+      let errorMessage: string = json1.responseMap.err_msg
+      return new Promise((reject) => {
+        reject([errorMessage, []])
      }); 
     } 
 }

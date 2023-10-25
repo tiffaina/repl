@@ -66,20 +66,25 @@ public class ViewCSVHandler implements Route {
 
       if (listRows.size() > 0) {
         if (containsHeader) {
-          listRows.add(0, header);
-          Map<String, Object> responseMap = new HashMap<>();
-          responseMap.put("result", "success");
-          responseMap.put("data", listRows);
+                // Append the header to listRows only if it's not already included
+                if (!listRows.isEmpty() && !listRows.get(0).isEmpty() && !listRows.get(0).equals(header)) {
+                    listRows.add(0, header);
+                }
+            
 
-          return new ViewSuccessResponse(responseMap).serialize();
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("result", "success");
+            responseMap.put("data", listRows);
 
+            return new ViewSuccessResponse(responseMap).serialize();
+        
         } else {
           Map<String, Object> responseMap = new HashMap<>();
           responseMap.put("result", "success");
           responseMap.put("data", listRows);
 
-          return new ViewSuccessResponse(responseMap).serialize();
-        }
+          return new ViewSuccessResponse(responseMap).serialize();}
+        
       } else {
         Map<String, Object> responseMap = new HashMap<>();
         System.out.println("this was run");

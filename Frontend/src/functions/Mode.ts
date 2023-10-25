@@ -15,7 +15,7 @@ export const mode: REPLFunction = function (args: Array<string>): Promise<[strin
 
     // const mode: REPLFunction = function (args: Array<string>): Promise<string> {
       return new Promise((resolve, reject) => {
-        if (args.length !== 0) {
+        if (args.length !== 1) {
           reject(["Error - Mode Should Not Include Other Args", []]);
         } else {
           

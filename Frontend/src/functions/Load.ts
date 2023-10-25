@@ -44,7 +44,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
       });
   }
   // By default, set hasHeader to false
-  let hasHeaderCopy = false
+  let hasHeaderCopy = "false"
   if (args.length == 2) {
     // if (setHasHeader) {
     //   setHasHeader(false);}
@@ -54,11 +54,11 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
       // if (setHasHeader){
       // setHasHeader(true);}
       
-      hasHeaderCopy = true
+      hasHeaderCopy = "true"
     } else if (header.toLowerCase() === "false") {
       // if (setHasHeader) {
       // setHasHeader(false);}
-      hasHeaderCopy = false
+      hasHeaderCopy = "false"
     } else {
       return new Promise((resolve) => {
       resolve(["Error: header parameter must be either true or false.", []]);
@@ -70,15 +70,15 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
     // TODO: Access CSVDATA from backend and check existence
 
   async function callBackend(): Promise<[string, string[][]]> {
-    const fetch1 = await fetch("http://localhost:3232/loadCSV?filepath="+filepath+"&hasHeader="+hasHeaderCopy)
+    const fetch1 = await fetch("http://localhost:3232/loadCSV?filepath=Backend/"+filepath+"&hasHeader="+hasHeaderCopy)
     const json1 = await fetch1.json()
-    let result: string = json1.result
+    let result: string = json1.responseMap.result
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
       const resultArray: [string, string[][]] = [result, []];
       return resultArray;
     } else {
-      let errorMessage: string = json1.err_msg
+      let errorMessage: string = json1.responseMap.err_msg
       const errorArray: [string, string[][]] = [
         errorMessage,
         [],

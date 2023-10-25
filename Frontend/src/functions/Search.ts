@@ -21,16 +21,23 @@ export const search: REPLFunction = async function (args: Array<string>): Promis
   
   const fetch1 = await fetch("http://localhost:3232/searchCSV?searchVal="+searchVal+"&colIdentifier="+colIdentifier)
   const json1 = await fetch1.json()
-  let result: string = json1.result
+  console.log('Full Response:', json1);
+  let result: string = json1.responseMap.result
     // check that "result" from the responseMap is success. Otherwise return an error 
   if (result === "success") {
+    if ((json1.responseMap.matches).length === 0) {
       return new Promise((resolve) => {
-        resolve(["View success!", json1.data]);
+        resolve(["No results found", json1.responseMap.matches]);
         });
+      } else {
+          return new Promise((resolve) => {
+            resolve(["Search success!", json1.responseMap.matches]);
+          });
+      }
     } else {
-      let errorMessage: string = json1.err_msg
+      let errorMessage: string = json1.responseMap.err_msg
       return new Promise((resolve) => {
-        resolve(["errorMessage", []])
+        resolve([errorMessage, []])
      }); 
     } 
 }

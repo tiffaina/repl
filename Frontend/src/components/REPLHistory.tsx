@@ -88,17 +88,17 @@ interface REPLHistoryProps {
           </div>
         ) : (
           <div className="leftAlign">
-            <span aria-label={"Command"+ String(index) +"is: "} className="boldText">Command: </span>
+            <span aria-label={"Command "+ String(index) +" is: "} className="boldText">Command: </span>
             <span aria-label={`${command.commandString}`}>
               {command.commandString}
             </span>
             <br />
-            <span aria-label={"Output"+ String(index) +"is: "} className="boldText">Output: </span>
+            <span aria-label={"Output "+ String(index) +" is: "} className="boldText">Output: </span>
             <span aria-label={`${command.message}`}>
               {command.message}
             </span>
             <br />
-            <span aria-label={"Data"+ String(index) + "is: "} className="boldText">Data:</span>
+            <span aria-label={"Data "+ String(index) + " is: "} className="boldText">Data:</span>
             <CsvTable data={command.data} ariaLabel={`${command.data}`} />
             <br />
             <hr />

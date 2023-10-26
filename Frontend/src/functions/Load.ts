@@ -75,7 +75,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
     let result: string = json1.responseMap.result
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
-      const resultArray: [string, string[][]] = [result, []];
+      const resultArray: [string, string[][]] = ["Load success!", []];
       return resultArray;
     } else {
       let errorMessage: string = json1.responseMap.err_msg

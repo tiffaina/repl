@@ -2,7 +2,7 @@ import { REPLFunction } from "../functions/REPLFunction";
 import { Dispatch, SetStateAction, useState } from "react";
 
 
-class CommandRegistry {
+export class CommandRegistry {
   private static registry: Map<string, REPLFunction> = new Map();
 
   static registerCommand(commandName: string, commandFunction: REPLFunction): void {

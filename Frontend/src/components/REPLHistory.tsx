@@ -1,7 +1,8 @@
 import "../styles/main.css";
 import CsvTable from "./CsvTable";
 import { Command } from "../functions/Command";
-import { useRef, useEffect } from "react";
+
+import { useRef, useEffect, useState } from "react";
 import React from "react";
 
 /**
@@ -24,22 +25,57 @@ interface REPLHistoryProps {
  * @param props is the interface above containing the arguments to REPLHistory
  * @returns HTML div representing command history log
  */
-export function REPLHistory(props: REPLHistoryProps) {
-  // This code tells React to scroll to the bottom of the REPLHistory component
-  const messagesEndRef = useRef<null | HTMLDivElement>(null);
+
+  export function REPLHistory(props: REPLHistoryProps) {
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current!.scrollIntoView({ behavior: "smooth" });
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [props.history]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowUp") {
+      setScrollPosition(scrollPosition - 1);
+    } else if (e.key === "ArrowDown") {
+      setScrollPosition(scrollPosition + 1);
+    }
+  };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'o' && event.ctrlKey) {
+        event.preventDefault();
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   /**
    * This code maps each command to an HTML div with its command information and
    * output as a table, depending on what mode the app is in (brief/verbose)
    */
   return (
-    <div className="repl-history">
+    <div
+      className="repl-history"
+      tabIndex={-1}
+      onKeyDown={handleKeyDown}
+      ref={inputRef}
+    >
       {props.history.map((command, index) =>
         (props.mode === "brief") ? (
           <div className="leftAlign">
@@ -52,16 +88,18 @@ export function REPLHistory(props: REPLHistoryProps) {
           </div>
         ) : (
           <div className="leftAlign">
-            <span className="boldText">Command: </span>
-            <span aria-label={"commandString" + String(index)}>
+            <span aria-label={"Command"+ String(index) +"is: "} className="boldText">Command: </span>
+            <span aria-label={`${command.commandString}`}>
               {command.commandString}
             </span>
             <br />
-            <span className="boldText">Ouptut: </span>
-            <span aria-label={"commandMessage" + String(index)}>
+            <span aria-label={"Output"+ String(index) +"is: "} className="boldText">Output: </span>
+            <span aria-label={`${command.message}`}>
               {command.message}
             </span>
-            <CsvTable data={command.data} ariaLabel={"data" + String(index)} />
+            <br />
+            <span aria-label={"Data"+ String(index) + "is: "} className="boldText">Data:</span>
+            <CsvTable data={command.data} ariaLabel={`${command.data}`} />
             <br />
             <hr />
           </div>

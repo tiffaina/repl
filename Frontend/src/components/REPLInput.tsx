@@ -66,6 +66,10 @@ export function REPLInput(props: REPLInputProps) {
     .catch(error => {
     console.error("Error occurred:", error);
     // Handle the error, e.g., update the UI to show an error message.
+    setCount(count + 1);
+    newCommand = new Command(commandString, [], "Error occurred:"+error);
+    props.setHistory([...props.history, newCommand]);
+    setCommandString("");
   });
     // console.log('New History:', [...props.history]);
     

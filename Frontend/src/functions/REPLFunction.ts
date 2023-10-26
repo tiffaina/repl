@@ -10,5 +10,5 @@
  * *NOT* contain the command-name prefix.
  */
 export interface REPLFunction {
-  (args: string[]): Promise<[string, string[][]]>;
+  (args: string[]): Promise<[string[], string[][]]>;
 }

@@ -5,6 +5,9 @@ import { mode } from "../functions/Mode";
 import { load } from "../functions/Load";
 import { view } from "../functions/View";
 import { search } from "../functions/Search";
+import { mockload } from "../functions/MockLoad";
+import { mockview } from "../functions/MockView";
+import { mocksearch } from "../functions/MockSearch";
 
 
 /**
@@ -17,6 +20,9 @@ function App() {
     CommandRegistry.registerCommand('load_file', load);
     CommandRegistry.registerCommand('view', view);
     CommandRegistry.registerCommand('search', search);
+    CommandRegistry.registerCommand('mock_load_file', mockload);
+    CommandRegistry.registerCommand('mock_view', mockview);
+    CommandRegistry.registerCommand('mock_search', mocksearch);
 
   return (
     <div className="App">

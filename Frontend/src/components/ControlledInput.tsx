@@ -1,5 +1,7 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction } from "react";
+import { useEffect, useRef } from 'react';
+
 
 /**
  * These are the props for the ControlledInput component.
@@ -20,12 +22,32 @@ interface ControlledInputProps {
  * @returns an HTML input that shows and updates the text that the user has entered
  */
 export function ControlledInput(props: ControlledInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'i' && event.ctrlKey) {
+        event.preventDefault();
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   return (
     <input
+      ref={inputRef}
       type="text"
       className="repl-command-box"
       value={props.value}
-      placeholder="Enter command here!"
+      placeholder="Enter command here! Press Ctrl + i to focus on the input box. Press Ctrl + o to focus on the output history."
       onChange={(ev) => props.setValue(ev.target.value)}
       aria-label={props.ariaLabel}
     ></input>

@@ -16,14 +16,14 @@ import {REPLInput} from "../components/REPLInput"
  * @returns a message indicating either Load success! or an error.
  */
 // export const load: REPLFunction = function (args: Array<string>, setHeader: Dispatch<SetStateAction<boolean>>) {
-export const load: REPLFunction = function (args: Array<string>): Promise<[string, string[][]]> {
+export const load: REPLFunction = function (args: Array<string>): Promise<[string[], string[][]]> {
 
     
 
   // check that correct number of arguments is passed
   if (args.length >= 4 || args.length <= 1) {
     return new Promise((resolve) => {
-      resolve(["Error: incorrect number of arguments given to load_file command", []]);
+      resolve([["Error: incorrect number of arguments given to load_file command", ""], []]);
       });
     }
   
@@ -40,7 +40,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
     )
   ) {
     return new Promise((resolve) => {
-      resolve(["Error: filepath " + filepath + " located in an unaccessible directory.", []]);
+      resolve([["Error: filepath " + filepath + " located in an unaccessible directory.", ""], []]);
       });
   }
   // By default, set hasHeader to false
@@ -61,7 +61,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
       hasHeaderCopy = "false"
     } else {
       return new Promise((resolve) => {
-      resolve(["Error: header parameter must be either true or false.", []]);
+      resolve([["Error: header parameter must be either true or false.", ""], []]);
       });
       
     }
@@ -69,18 +69,18 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
   // Check that the filepath is in the list of valid files
     // TODO: Access CSVDATA from backend and check existence
 
-  async function callBackend(): Promise<[string, string[][]]> {
+  async function callBackend(): Promise<[string[], string[][]]> {
     const fetch1 = await fetch("http://localhost:3232/loadCSV?filepath=Backend/"+filepath+"&hasHeader="+hasHeaderCopy)
     const json1 = await fetch1.json()
     let result: string = json1.responseMap.result
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
-      const resultArray: [string, string[][]] = ["Load success!", []];
+      const resultArray: [string[], string[][]] = [["Load success!", filepath], []];
       return resultArray;
     } else {
       let errorMessage: string = json1.responseMap.err_msg
-      const errorArray: [string, string[][]] = [
-        errorMessage,
+      const errorArray: [string[], string[][]] = [
+        [errorMessage, ""],
         [],
       ];
       return errorArray;

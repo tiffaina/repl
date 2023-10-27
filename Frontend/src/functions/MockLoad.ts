@@ -17,7 +17,12 @@ import { useDataContext } from '../components/DataContext';
  * @returns a message indicating either Load success! or an error.
  */
 export const mockload: REPLFunction = function (args: Array<string>): Promise<[string[], string[][]]> {
-    console.log(args)
+  if ((args.length > 5 ) || (args.length < 3)) {
+    return new Promise((resolve) => {
+      resolve([["Error: incorrect number of arguments given to mock_load_file command","", ""], []]);
+      });
+  }
+
   let filepath = args[1];
   let filepathSplit: string[] = filepath.split("/");
   // Check that the file is in the correct directory (data)

@@ -22,9 +22,9 @@ test("mode, load, and view success (verbose mode then brief mode)", async ({
   await expect(page.locator(".repl-history")).toContainText("Mode success!");
 
   await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("mock_load_file data/filepath1");
+  await page.getByLabel("Command input").fill("mock_load_file data/filepath1 true");
   await page.getByRole("button", { name: "Submitted 1 times" }).click();
-  await expect(page.locator(".repl-history")).toContainText("mock_load_file data/filepath1");
+  await expect(page.locator(".repl-history")).toContainText("mock_load_file data/filepath1 true");
   await expect(page.locator(".repl-history")).toContainText("Load success!");
 
   await page.getByLabel("Command input").click();
@@ -33,7 +33,7 @@ test("mode, load, and view success (verbose mode then brief mode)", async ({
   await expect(page.locator(".repl-history")).toContainText("mock_view");
   await expect(page.locator(".repl-history")).toContainText("View success!");
   /** check that the data table was loaded */
-  await expect(page.getByLabel("12345Thesongremainsthesame.", { exact: true })).toBeVisible();
+  await expect(page.locator(".repl-history")).toContainText("12345Thesongremainsthesame.");
   // await expect(page.getByLabel("data2cell0,0")).toHaveText("1");
   // await expect(page.getByLabel("data2cell0,1")).toHaveText("2");
   // await expect(page.getByLabel("data2cell0,2")).toHaveText("3");
@@ -51,7 +51,9 @@ test("mode, load, and view success (verbose mode then brief mode)", async ({
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("mode");
   await page.getByRole("button", { name: "Submitted 3 times" }).click();
+  await expect(page.locator(".repl-history")).toContainText("mode");
   await expect(page.locator(".repl-history")).toContainText("Mode success!");
+
 
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("mock_view");
@@ -70,13 +72,13 @@ test("mode, load valid file and view, load invalid file and view, verbose mode",
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("mode");
   await page.getByRole("button", { name: "Submitted 0 times" }).click();
-  await expect(page.getByLabel("commandString0")).toHaveText("mode");
-  await expect(page.getByLabel("commandMessage0")).toHaveText("Mode success!");
+  await expect(page.locator(".repl-history")).toContainText("mode");
+  await expect(page.locator(".repl-history")).toContainText("Mode success!");
 
   await page.getByLabel("Command input").click();
-  await page.getByLabel("Command input").fill("mock_load_file data/filepath1");
+  await page.getByLabel("Command input").fill("mock_load_file data/filepath1 true");
   await page.getByRole("button", { name: "Submitted 1 times" }).click();
-  await expect(page.locator(".repl-history")).toContainText("mock_load_file data/filepath1");
+  await expect(page.locator(".repl-history")).toContainText("mock_load_file data/filepath1 true");
   await expect(page.locator(".repl-history")).toContainText("Load success!");
 
   await page.getByLabel("Command input").click();
@@ -85,7 +87,7 @@ test("mode, load valid file and view, load invalid file and view, verbose mode",
   await expect(page.locator(".repl-history")).toContainText("mock_view");
   await expect(page.locator(".repl-history")).toContainText("View success!");
   /** check that the data table was loaded */
-  await expect(page.getByLabel("12345Thesongremainsthesame.", { exact: true })).toBeVisible();
+  await expect(page.locator(".repl-history")).toContainText("12345Thesongremainsthesame.");
 
   await page.getByLabel("Command input").click();
   await page

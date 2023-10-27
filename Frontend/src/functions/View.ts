@@ -17,7 +17,7 @@ import BackendStatus from '../components/SharedState';
 export const view: REPLFunction = async function (args: Array<string>): Promise<[string[], string[][]]>  {
   
     let filepath = args[1]
-    if (!BackendStatus.getBackendStatus() === true) {
+    if (BackendStatus.getBackendStatus() !== true) {
         return new Promise((resolve) => {
           resolve([["Backend has not been loaded"], []])
       }); 
@@ -25,7 +25,7 @@ export const view: REPLFunction = async function (args: Array<string>): Promise<
 
     if (filepath === "") {
       return new Promise((resolve) => {
-        resolve([["Error: CSV file could not be viewed. Load correct filepath first."], json1.responseMap.data]);
+        resolve([["Error: CSV file could not be viewed. Load correct filepath first."], []]);
         });
     }
     const fetch1 = await fetch("http://localhost:3232/viewCSV")

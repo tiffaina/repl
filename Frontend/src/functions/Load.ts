@@ -27,7 +27,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
   // check that correct number of arguments is passed
   if (args.length > 6 || args.length < 3) {
     return new Promise((resolve) => {
-      resolve([["Error: incorrect number of arguments given to load_file command"], []]);
+      resolve([["Error: incorrect number of arguments given to load_file command", "", ""], []]);
       });
     }
   
@@ -44,7 +44,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
     )
   ) {
     return new Promise((resolve) => {
-      resolve([["Error: filepath " + filepath + " located in an unaccessible directory."], []]);
+      resolve([["Error: filepath " + filepath + " located in an unaccessible directory.", "", ""], []]);
       });
   }
   // By default, set hasHeader to false
@@ -66,7 +66,7 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
 
     } else {
       return new Promise((resolve) => {
-      resolve([["Error: header parameter must be either true or false."], []]);
+      resolve([["Error: header parameter must be either true or false.", "", ""], []]);
       });
       
     }

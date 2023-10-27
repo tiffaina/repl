@@ -15,7 +15,7 @@ import {REPLInput} from "../components/REPLInput"
  * message indicating search success or an error.
  */
 
-export const search: REPLFunction = async function (args: Array<string>): Promise<[string, string[][]]>  {
+export const search: REPLFunction = async function (args: Array<string>): Promise<[string[], string[][]]>  {
   let colIdentifier = args[1]
   let searchVal = args[2]
   
@@ -27,17 +27,17 @@ export const search: REPLFunction = async function (args: Array<string>): Promis
   if (result === "success") {
     if ((json1.responseMap.matches).length === 0) {
       return new Promise((resolve) => {
-        resolve(["No results found", json1.responseMap.matches]);
+        resolve([["No results found"], json1.responseMap.matches]);
         });
       } else {
           return new Promise((resolve) => {
-            resolve(["Search success!", json1.responseMap.matches]);
+            resolve([["Search success!"], json1.responseMap.matches]);
           });
       }
     } else {
       let errorMessage: string = json1.responseMap.err_msg
       return new Promise((resolve) => {
-        resolve([errorMessage, []])
+        resolve([[errorMessage], []])
      }); 
     } 
 }

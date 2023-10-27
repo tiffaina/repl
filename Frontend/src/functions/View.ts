@@ -2,7 +2,11 @@ import { Command } from "../functions/Command";
 import { Dispatch, SetStateAction, useState } from "react";
 import { filepathMap } from "../functions/mockedJson";
 import { REPLFunction } from "../functions/REPLFunction";
-import {REPLInput} from "../components/REPLInput"
+import {REPLInput} from "../components/REPLInput";
+import { useDataContext } from '../components/DataContext';
+import BackendStatus from '../components/SharedState';
+
+
 
 /**
  * View function 
@@ -13,6 +17,12 @@ import {REPLInput} from "../components/REPLInput"
 export const view: REPLFunction = async function (args: Array<string>): Promise<[string[], string[][]]>  {
   
     let filepath = args[1]
+    if (!BackendStatus.getBackendStatus() === true) {
+        return new Promise((resolve) => {
+          resolve([["Backend has not been loaded"], []])
+      }); 
+    }
+
     if (filepath === "") {
       return new Promise((resolve) => {
         resolve([["Error: CSV file could not be viewed. Load correct filepath first."], json1.responseMap.data]);

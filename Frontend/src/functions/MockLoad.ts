@@ -2,6 +2,8 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { validFiles } from "../functions/mockedJson";
 import { REPLFunction } from "./REPLFunction";
+import { useDataContext } from '../components/DataContext';
+
 
 /**
  * Load function which attempts to load a file from the mocked data and sets

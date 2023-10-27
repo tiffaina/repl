@@ -20,9 +20,8 @@ Total estimated time: ~20 hours
 
 
 Here are a few notable design choices we made:
-In order for our 3 handlers to have access to the same variables we made a shared state class private static variables that can be globally accessed.
+- In order for our 3 handlers to have access to the same variables we made a shared state class private static variables that can be globally accessed.
 This is where a variable is stored that tells whether the backend has been loaded with a file. 
-- 
 - To make our program accessible you can navigate the scrollable history with up and down arrows, and enter the submit button with the error key. We added keyboard shortcuts like Ctrl + I to shift react focus to the input box, then Ctrl + O to shift the focus to the output/history box. The manual shift of focus allows the user to control the program without the trackpad.
 
 

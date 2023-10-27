@@ -71,7 +71,6 @@ test("mode, load, and view success (verbose mode then brief mode)", async ({
 test("mode, load valid file and view, load invalid file and view, verbose mode", async ({
   page,
 }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("mode");
   await page.getByRole("button", { name: "Submitted 0 times" }).click();

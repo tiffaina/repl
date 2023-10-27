@@ -3,6 +3,10 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { Command } from "../functions/Command";
 import CommandRegistry from './CommandRegistration';
+import { useDataContext } from './DataContext';
+import BackendStatus from './SharedState';
+
+
 
 /**
  * These are the props for the REPLInput component.
@@ -31,8 +35,9 @@ export function REPLInput(props: REPLInputProps) {
   // These constants manage the state that sub-components have access to
   const [commandString, setCommandString] = useState<string>("");
   const [count, setCount] = useState<number>(0);
-  const [filepath, setFilepath] = useState<string>("");
   const [hasHeader, setHasHeader] = useState<string>("");
+  const [filepath, setFilepath] = useState<string>("");
+  let backendLoaded: boolean = BackendStatus.getBackendStatus();
   
 
   // This function enables the command to be sent when the return key is pressed.
@@ -80,8 +85,9 @@ export function REPLInput(props: REPLInputProps) {
     newCommand = new Command(commandString, [], "Error occurred:"+error);
     props.setHistory([...props.history, newCommand]);
     setCommandString("");
+    BackendStatus.setStatus(false)
   });
-    // console.log('New History:', [...props.history]);
+
     
     
   }

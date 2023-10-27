@@ -1,10 +1,9 @@
-/**
- * Search function
- */
+
 import { Console } from "console";
 import { Command } from "../functions/Command";
 import { validFiles, searchMap } from "../functions/mockedJson";
 import { REPLFunction } from "./REPLFunction";
+import { useDataContext } from '../components/DataContext';
 
 /**
  * Search function

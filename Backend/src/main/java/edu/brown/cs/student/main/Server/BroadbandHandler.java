@@ -41,17 +41,18 @@ public class BroadbandHandler implements Route {
       // Low-level NWS API invocation isn't the job of this class!
       // Neither is caching!
       BroadbandData data = state.getBroadbandData(stateName, countyName);
+      String coverage = data.coverage();
       // Building responses is the job of this class:
       responseMap.put("result", "success");
 
       // Decision point; note the difference here
-      responseMap.put("percentage of households with broadband access", ACSDataAdapter.toJson(data));
+      responseMap.put("percentage_of_households_with_broadband_access", coverage);
       responseMap.put("state", stateName);
       responseMap.put("county", countyName);
 
       return adapter.toJson(responseMap);
     } catch (DatasourceException e) {
-      responseMap.put("type", "error");
+      responseMap.put("result", "error");
       responseMap.put("error_type", "datasource");
       responseMap.put("details", e.getMessage());
       return adapter.toJson(responseMap);

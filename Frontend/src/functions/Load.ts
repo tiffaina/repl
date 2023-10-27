@@ -2,7 +2,11 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { validFiles } from "../functions/mockedJson";
 import { REPLFunction } from "../functions/REPLFunction";
-import {REPLInput} from "../components/REPLInput"
+import {REPLInput} from "../components/REPLInput";
+import { useDataContext } from '../components/DataContext';
+import BackendStatus from '../components/SharedState';
+
+
 
 /**
  * Load function which attempts to load a file from the mocked data and sets
@@ -58,7 +62,8 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
     } else if (header.toLowerCase() === "false") {
       // if (setHasHeader) {
       // setHasHeader(false);}
-      hasHeaderCopy = "false"
+        hasHeaderCopy = "false"
+
     } else {
       return new Promise((resolve) => {
       resolve([["Error: header parameter must be either true or false."], []]);
@@ -75,14 +80,17 @@ export const load: REPLFunction = function (args: Array<string>): Promise<[strin
     let result: string = json1.responseMap.result
     // check that "result" from the responseMap is success. Otherwise return an error 
     if (result === "success") {
-      const resultArray: [string[], string[][]] = [["Load success!", filepath], []];
+      const resultArray: [string[], string[][]] = [["Load success!", filepath, hasHeaderCopy], []];
+      BackendStatus.setStatus(true)
       return resultArray;
     } else {
       let errorMessage: string = json1.responseMap.err_msg
       const errorArray: [string[], string[][]] = [
-        [errorMessage, ""],
+        [errorMessage, "", ""],
         [],
       ];
+            BackendStatus.setStatus(false)
+
       return errorArray;
     } 
   }

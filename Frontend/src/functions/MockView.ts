@@ -1,6 +1,7 @@
 import { Command } from "../functions/Command";
 import { filepathMap } from "../functions/mockedJson";
 import { REPLFunction } from "./REPLFunction";
+import { useDataContext } from '../components/DataContext';
 
 /**
  * View function 

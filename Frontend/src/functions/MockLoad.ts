@@ -15,6 +15,7 @@ import { REPLFunction } from "./REPLFunction";
  * @returns a message indicating either Load success! or an error.
  */
 export const mockload: REPLFunction = function (args: Array<string>): Promise<[string[], string[][]]> {
+    console.log(args)
   let filepath = args[1];
   let filepathSplit: string[] = filepath.split("/");
   // Check that the file is in the correct directory (data)
@@ -25,29 +26,31 @@ export const mockload: REPLFunction = function (args: Array<string>): Promise<[s
     )
   ) {
     return new Promise((resolve) => {
-        resolve([["Error: filepath " + filepath + " located in an unaccessible directory.",""], []]);
+        resolve([["Error: filepath " + filepath + " located in an unaccessible directory.","", ""], []]);
         });
   }
-//   // By default, set hasHeader to false
-//   if (commandArr.length == 2) {
-//     setHeader(false);
-//   } else if (commandArr.length > 2) {
-//     let hasHeader = commandArr[2];
-//     if (hasHeader.toLowerCase() === "true") {
-//       setHeader(true);
-//     } else if (hasHeader.toLowerCase() === "false") {
-//       setHeader(false);
-//     } else {
-//       return "Error: header parameter must be either true or false.";
-//     }
-//   }
+  // By default, set hasHeader to false
+  let hasHeader = "false";
+  if (args.length == 2) {
+    hasHeader = "false";
+  } else if (args.length > 2) {
+    if (args[2].toLowerCase() === "true") {
+        hasHeader = "true"
+    } else if (args[2].toLowerCase() === "false") {
+        hasHeader = "false"
+    } else {
+        return new Promise((resolve) => {
+            resolve([["Error: header parameter must be either true or false.", "", ""], []]);
+            });
+    }
+  }
   // Check that the filepath is in the list of valid files
   if (validFiles.includes(filepath)) {
     return new Promise((resolve) => {
-        resolve([["Load success!",filepath], []]);
+        resolve([["Load success!", filepath, hasHeader], []]);
         });
   }
   return new Promise((resolve) => {
-    resolve([["Error: " + filepath + " not found",""], []]);
+    resolve([["Error: " + filepath + " not found","", ""], []]);
     });
 }

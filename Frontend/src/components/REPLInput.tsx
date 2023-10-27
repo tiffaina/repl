@@ -32,6 +32,7 @@ export function REPLInput(props: REPLInputProps) {
   const [commandString, setCommandString] = useState<string>("");
   const [count, setCount] = useState<number>(0);
   const [filepath, setFilepath] = useState<string>("");
+  const [hasHeader, setHasHeader] = useState<string>("");
   
 
   // This function enables the command to be sent when the return key is pressed.
@@ -52,15 +53,19 @@ export function REPLInput(props: REPLInputProps) {
     let newCommand: Command;
 
     // get mapped command function and execute it
-    commandArr.push(filepath)
+    commandArr.push(filepath) // add filepath into args
+    commandArr.push(hasHeader) // add hasHeader into args
     let result = CommandRegistry.executeCommand(command, commandArr)
     .then(result => {
       if (result[0][0] === "Mode success!") {
         let newMode = props.mode === "brief" ? "verbose" : "brief";
         props.setMode(newMode);
       } 
-      if(result.length > 1) {
+      if(result[0].length === 2) {
         setFilepath(result[0][1]);
+      } else if (result[0].length === 3) {
+        setFilepath(result[0][1]);
+        setHasHeader(result[0][2]);
       }
       newCommand = new Command(commandString, result[1], result[0][0]);
       setCount(count + 1);

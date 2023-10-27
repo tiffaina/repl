@@ -10,7 +10,7 @@ export class CommandRegistry {
     
   }
 
-  static async executeCommand(commandName: string, args: string[]): Promise<[string, string[][]]> {
+  static async executeCommand(commandName: string, args: string[]): Promise<[string[], string[][]]> {
     const commandFunction = CommandRegistry.registry.get(commandName);
     if (commandFunction) {
       try {

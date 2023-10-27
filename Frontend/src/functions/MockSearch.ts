@@ -1,8 +1,10 @@
 /**
  * Search function
  */
+import { Console } from "console";
 import { Command } from "../functions/Command";
 import { validFiles, searchMap } from "../functions/mockedJson";
+import { REPLFunction } from "./REPLFunction";
 
 /**
  * Search function
@@ -14,40 +16,35 @@ import { validFiles, searchMap } from "../functions/mockedJson";
  * @returns a Command with the command string, the result of searching, and a
  * message indicating search success or an error.
  */
-export function mocksearch(
-  filepath: string,
-  hasHeader: boolean,
-  commandString: string
-) {
-  if (!validFiles.includes(filepath)) {
-    return new Command(
-      commandString,
-      [],
-      "Error: CSV file could not be searched. Load correct filepath first."
-    );
+export const mocksearch: REPLFunction = function (args: Array<string>): Promise<[string[], string[][]]> {
+    let filepath = args[3];
+    console.log(args)
+    console.log(filepath)
+    if (!validFiles.includes(filepath)) {
+        return new Promise((resolve) => {
+            resolve([["Error: CSV file could not be searched. Load correct filepath first"], []]);
+        });
   }
   // Use a regex to split the commandString
+  let commandString = args[0] + " " + args[1] + " " + args[2]
   let commandStringReg: RegExpMatchArray | null =
     commandString.match(/(?:[^\s"]+|"[^"]*")+/g);
   if (commandStringReg == null) {
-    return new Command(
-      commandString,
-      [],
-      "Error: incorrect number of arguments given to search command. Two arguments expected: <column> <value>."
-    );
+    return new Promise((resolve) => {
+        resolve([["Error: incorrect number of arguments given to search command. Two arguments expected: <column> <value>."], []]);
+    });
   }
   // Remove the quotation marks from the split strings
   let commandStringSplit = commandStringReg.map((segment) => {
     return segment.replaceAll('"', "");
   });
   if (commandStringSplit.length !== 3) {
-    return new Command(
-      commandString,
-      [],
-      "Error: incorrect number of arguments given to search command. Two arguments expected: <column> <value>."
-    );
+    return new Promise((resolve) => {
+        resolve([["Error: incorrect number of arguments given to search command. Two arguments expected: <column> <value>."], []]);
+    });
   }
   // Attempt to find the searched data in the loaded CSV data
+  let hasHeader = args[4]
   let result = searchMap.get(
     filepath +
       " " +
@@ -55,32 +52,31 @@ export function mocksearch(
       " " +
       commandStringSplit[2] +
       " " +
-      String(hasHeader)
+      hasHeader
   );
-  if (result === undefined) {
-    if (!hasHeader && isNaN(parseInt(commandStringSplit[1]))) {
-      return new Command(
-        commandString,
-        [],
-        'Error: search unsuccessful, could not search non-numeric column ID "' +
-          commandStringSplit[1] +
-          '" in file with no headers.'
-      );
+  if (result !== undefined) {
+    let validResult = result as string[][];
+    if (validResult.length === 0) {
+        return new Promise((resolve) => {
+            resolve([['Search success! However, no rows matching the search criteria "' +
+            commandString +
+            '" were found.'], []]);
+        });
+    } else {
+        return new Promise((resolve) => {
+            resolve([["Search success!"], validResult]);
+        });
     }
-    return new Command(
-      commandString,
-      [],
-      "Error: search unsuccessful, could not find the value in the given column."
-    );
-  }
-  if (result.length === 0) {
-    return new Command(
-      commandString,
-      result,
-      'Search success! However, no rows matching the search criteria "' +
-        commandString +
-        '" were found.'
-    );
-  }
-  return new Command(commandString, result, "Search success!");
+  } else {
+    if ((hasHeader === "false") && isNaN(parseInt(commandStringSplit[1]))) {
+        return new Promise((resolve) => {
+            resolve([['Error: search unsuccessful, could not search non-numeric column ID "' +
+            commandStringSplit[1] +
+            '" in file with no headers.'], []]);
+        });
+    }
+    return new Promise((resolve) => {
+        resolve([["Error: search unsuccessful, could not find the value in the given column."], []]);
+    });
+}
 }

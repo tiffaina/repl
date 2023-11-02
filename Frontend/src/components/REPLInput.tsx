@@ -73,9 +73,13 @@ export function REPLInput(props: REPLInputProps) {
         setHasHeader(result[0][2]);
       }
       newCommand = new Command(commandString, result[1], result[0][0]);
-      setCount(count + 1);
-      props.setHistory([...props.history, newCommand]);
-      setCommandString("");
+      if (count === props.history.length) {
+        setCount(count + 1);
+        props.setHistory([...props.history, newCommand]);
+        setCommandString("");
+      } else {
+        throw Error;
+      }
     })
     
     .catch(error => {
@@ -83,6 +87,8 @@ export function REPLInput(props: REPLInputProps) {
     // Handle the error, e.g., update the UI to show an error message.
     setCount(count + 1);
     newCommand = new Command(commandString, [], "Error occurred:"+error);
+    
+
     props.setHistory([...props.history, newCommand]);
     setCommandString("");
     BackendStatus.setStatus(false)

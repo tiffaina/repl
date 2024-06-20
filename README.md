@@ -1,9 +1,9 @@
-# REPL-inguyen4-taina1
+# Full Stack - Software Engineering
 
-## Sprint 4: REPL README
+## Sprint E
 
 
-[Repo](https://github.com/cs0320-f23/repl-inguyen4-taina1)
+
 
 
 In a nutshell: Frontend of a web application allowing users to load, view, and search
@@ -12,8 +12,6 @@ CSV files through a command line tool. Backend allows the server to make API cal
 
 Team members: inguyen4 (@ilana27) and taina1. We worked on the vast majority of the project by pair programming, where we sat together and switched roles as the driver/navigator. We also developed on individual branches, and practiced merging into main.
 
-
-Total estimated time: ~20 hours
 
 
 ## Design choices:

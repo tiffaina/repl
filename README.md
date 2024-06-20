@@ -1,18 +1,23 @@
-# Full Stack - Software Engineering
-
-## Sprint E
-
-
-
+# Full Stack REPL - Software Engineering
 
 
 In a nutshell: Frontend of a web application allowing users to load, view, and search
 CSV files through a command line tool. Backend allows the server to make API calls to ACS Datasource. 
 
 
-Team members: inguyen4 (@ilana27) and taina1. We worked on the vast majority of the project by pair programming, where we sat together and switched roles as the driver/navigator. We also developed on individual branches, and practiced merging into main.
+Team members: taina1 and ilana27. We worked on the vast majority of the project by pair programming, where we sat together and switched roles as the driver/navigator. We also developed on individual branches, and practiced merging into main.
+
+## Running the program:
 
 
+To run our program locally, first run `npm install`, to ensure that you have all dependencies needed by our program. Next, run `npm start`, which will start the program running locally on your computer. Then, navigate to http://localhost:8000/ to use the program!
+
+
+On the page, valid commands include:
+
+
+mode: changes the mode from brief to verbose and vice versa
+load &lt;filepath&gt; &lt;OPTIONAL hasHeader = true or false&gt;: loads in a CSV from the given filepath, hasHeader parameter is optional and will default to FALSE if not given one.
 
 ## Design choices:
 
@@ -70,17 +75,7 @@ To run the tests in our program, first run `npx playwright install` to install P
 to run jest: npx jest
 
 
-## Running the program:
 
-
-To run our program locally, first run `npm install`, to ensure that you have all dependencies needed by our program. Next, run `npm start`, which will start the program running locally on your computer. Then, navigate to http://localhost:8000/ to use the program!
-
-
-On the page, valid commands include:
-
-
-mode: changes the mode from brief to verbose and vice versa
-load &lt;filepath&gt; &lt;OPTIONAL hasHeader = true or false&gt;: loads in a CSV from the given filepath, hasHeader parameter is optional and will default to FALSE if not given one.
 
 
 view: displays the currently-loaded CSV

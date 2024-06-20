@@ -2,7 +2,7 @@
   "name": "cs32-sprint3-gearup",
   "version": "22.2.0",
   "description": "Brown CSCI0320 Sprint 3 Gearup for Fall 2023",
-  "homepage": "https://gitname.github.io/react-gh-pages",
+  "homepage": "https://gitname.github.io/repl",
   "license": "UNLICENSED",
   "dependencies": {
     "@types/react": "^18.0.9",
